@@ -1,0 +1,36 @@
+# --- Secrets / environnement ---
+# Jamais de secrets dans Git.
+.env
+.env.*
+!.env.example
+!.env.wireguard.example
+
+# --- Node.js ---
+node_modules/
+dist/
+*.tsbuildinfo
+coverage/
+
+# --- Flutter / Dart (complément du .gitignore généré dans app/) ---
+app/build/
+app/.dart_tool/
+app/.flutter-plugins*
+app/.packages
+app/.pub/
+app/web/README.md
+
+# --- Android ---
+*.apk
+*.aab
+*.ap_
+*.dex
+app/android/app/*.keystore
+app/android/app/*.jks
+
+# --- Windows ---
+Thumbs.db
+Desktop.ini
+
+# --- Logs ---
+logs/
+*.log

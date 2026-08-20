@@ -1,0 +1,66 @@
+generator client {
+  provider               = "prisma-client"
+  output                 = "../src/generated/prisma"
+  moduleFormat           = "esm"
+  generatedFileExtension = "ts"
+  importFileExtension    = "ts"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Country {
+  id        String   @id @default(uuid())
+  code      String   @unique
+  name      String
+  flag      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  servers VpnServer[]
+}
+
+model VpnProvider {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  isActive  Boolean  @default(true)
+  priority  Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  servers VpnServer[]
+}
+
+model VpnServer {
+  id         String   @id @default(uuid())
+  name       String
+  isActive   Boolean  @default(true)
+  countryId  String
+  providerId String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  country  Country   @relation(fields: [countryId], references: [id])
+  provider VpnProvider @relation(fields: [providerId], references: [id])
+  connections VpnConnection[]
+
+  @@unique([name])
+  @@index([countryId])
+  @@index([providerId])
+}
+
+model VpnConnection {
+  id         String   @id @default(uuid())
+  serverId   String
+  status     String   @default("READY")
+  protocol   String   @default("DEMO")
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  server VpnServer @relation(fields: [serverId], references: [id])
+
+  @@index([serverId])
+  @@index([status])
+}
